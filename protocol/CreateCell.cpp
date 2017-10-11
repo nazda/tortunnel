@@ -36,13 +36,15 @@
 CreateCell::CreateCell(uint16_t circuitId, DH *dh, RSA *onionKey) :
   Cell(circuitId, (unsigned char)0x01)
 {
-  int            plaintextPayloadLength = BN_num_bytes(dh->pub_key);
+  const BIGNUM *pub_key;
+  DH_get0_key(dh, &pub_key, NULL);
+  int            plaintextPayloadLength = BN_num_bytes(pub_key);
   unsigned char* plaintextPayload       = (unsigned char*)malloc(plaintextPayloadLength);
 
   int            encryptedPayloadLength;
   unsigned char* encryptedPayload;
 
-  BN_bn2bin(dh->pub_key, plaintextPayload);
+  BN_bn2bin(pub_key, plaintextPayload);
 
   HybridEncryption::encrypt(plaintextPayload, plaintextPayloadLength,
 			    &encryptedPayload, &encryptedPayloadLength,

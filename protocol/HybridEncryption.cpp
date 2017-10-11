@@ -35,6 +35,7 @@
 #include <openssl/evp.h>
 #include <openssl/rand.h>
 #include <openssl/aes.h>
+#include <openssl/modes.h>
 #include <openssl/rsa.h>
 
 #include <iostream>
@@ -57,7 +58,8 @@ void HybridEncryption::AES_encrypt(unsigned char *keyMaterial, int keyLength,
   memset(ecount_buf, 0, sizeof(ecount_buf));
 
   AES_set_encrypt_key(keyMaterial, keyLength*8, &key);
-  AES_ctr128_encrypt(in, out, len, &key, ivec, ecount_buf, &num);
+  //AES_ctr128_encrypt(in, out, len, &key, ivec, ecount_buf, &num);
+  CRYPTO_ctr128_encrypt(in, out, len, &key, ivec, ecount_buf, &num, (block128_f)AES_encrypt);
 }
 
 void HybridEncryption::encryptInHybridChunk(unsigned char* plaintext, int plaintextLength,

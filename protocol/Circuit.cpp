@@ -73,8 +73,9 @@ void Circuit::initializeDhParameters() {
   BN_hex2bn(&(this->p), SAFE_PRIME);
   BN_set_word(this->g, 2);
 
-  this->dh->p = BN_dup(this->p);
-  this->dh->g = BN_dup(this->g);
+  //this->dh->p = BN_dup(this->p);
+  //this->dh->g = BN_dup(this->g);
+DH_set0_pqg(this->dh, this->p, NULL, this->g);
 
   DH_generate_key(dh);
 }

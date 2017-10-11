@@ -3,3 +3,11 @@ To install:
 Extract and run: ./configure; make;
 
 To build, you'll need the boost libraries and openssl.
+
+
+sudo apt-get install libssl-dev libboost-system-dev
+git clone https://github.com/diyism/tortunnel.git
+automake --add-missing
+autoreconf
+./configure
+make

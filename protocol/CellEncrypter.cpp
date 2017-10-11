@@ -30,6 +30,7 @@
 
 
 #include "CellEncrypter.h"
+#include <openssl/modes.h>
 #include <cassert>
 #include <openssl/sha.h>
 
@@ -121,7 +122,8 @@ void CellEncrypter::aesOperate(Cell &cell,
   
   assert(cellPayloadLength < sizeof(buf));
 
-  AES_ctr128_encrypt(cellPayload, buf, cellPayloadLength, key, iv, ec, num);  
+   //AES_ctr128_encrypt(cellPayload, buf, cellPayloadLength, key, iv, ec, num);  
+  CRYPTO_ctr128_encrypt(cellPayload, buf, cellPayloadLength, key, iv, ec, num, (block128_f)AES_encrypt);
   memcpy(cellPayload, buf, cellPayloadLength);
 }
 

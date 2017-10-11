@@ -42,14 +42,18 @@
 CreatedCell::CreatedCell(DH *dh) : Cell(), dh(dh) {}
 
 bool CreatedCell::isValid() {
-  return (getType() == 0x02) && (getPayloadSize() > BN_num_bytes(dh->pub_key));
+  const BIGNUM *pub_key;
+  DH_get0_key(dh, &pub_key, NULL);
+  return (getType() == 0x02) && (getPayloadSize() > BN_num_bytes(pub_key));
 }
 
 int CreatedCell::getKeyMaterial(unsigned char** keyMaterial, unsigned char** verifier) {
-  BIGNUM *dhResponse    = BN_bin2bn(getPayload(), BN_num_bytes(dh->pub_key), NULL);
+  const BIGNUM *pub_key;
+  DH_get0_key(dh, &pub_key, NULL);
+  BIGNUM *dhResponse    = BN_bin2bn(getPayload(), BN_num_bytes(pub_key), NULL);
   *keyMaterial          = (unsigned char*)malloc(DH_size(dh));  
   int keyMaterialLength = DH_compute_key(*keyMaterial, dhResponse, dh);
-  *verifier             = (getPayload()+BN_num_bytes(dh->pub_key));
+  *verifier             = (getPayload()+BN_num_bytes(pub_key));
 
   BN_free(dhResponse);
 

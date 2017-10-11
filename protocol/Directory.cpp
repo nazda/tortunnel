@@ -70,7 +70,7 @@ void Directory::getRandomServerListing(RetrieveServerListingHandler handler)
 
 void Directory::getServerListingFor(std::string &server, RetrieveServerListingHandler handler) 
 {
-  int position = directoryList.find(server);
+  /*int position = directoryList.find(server);
 
   if (position == std::string::npos)
     throw ServerNotFoundException();
@@ -88,6 +88,9 @@ void Directory::getServerListingFor(std::string &server, RetrieveServerListingHa
     throw ServerNotFoundException();
 
   std::string serverString = directoryList.substr(position, end-position);
+  */
+  
+  std::string serverString =  server;
   boost::shared_ptr<ServerListing> serverListing(new ServerListing(io_service, serverString));
   serverListing->getDescriptorList(boost::bind(&Directory::getServerListingComplete,
 					       this, serverListing, handler, 

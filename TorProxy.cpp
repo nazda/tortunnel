@@ -138,10 +138,8 @@ void getServerListingComplete(boost::asio::io_service &io_service,
 
 void getDirectoryListingComplete(boost::asio::io_service &io_service,
 				 Directory &directory,
-				 Arguments &arguments,
-				 const boost::system::error_code &er)
+				 Arguments &arguments)
 {
-
   if (arguments.random) {
     directory.getRandomServerListing(boost::bind(getServerListingComplete,
 						 boost::ref(io_service),
@@ -214,11 +212,13 @@ int main(int argc, char** argv) {
   boost::asio::io_service io_service;
 
   Directory directory(io_service);
-  directory.retrieveDirectoryListing(boost::bind(getDirectoryListingComplete,
+  /*directory.retrieveDirectoryListing(boost::bind(getDirectoryListingComplete,
 						 boost::ref(io_service),
 						 boost::ref(directory),
 						 boost::ref(arguments),
 						 placeholders::error));  
+  */
+  getDirectoryListingComplete(io_service, directory, arguments);
 
   io_service::work work(io_service);
   io_service.run();
